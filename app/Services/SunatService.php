@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use DateTime;
-use Greenter\See;
+use Greenter\See;//importar
 use Greenter\Model\Sale\Invoice;
 use Greenter\Model\Client\Client;
 use Greenter\Model\Company\Address;
@@ -19,12 +19,13 @@ class SunatService
 {
     public function getSee($company)
     {
+        // configuraremos el certificado digital, la ruta del servicio y las credenciales (Clave SOL) a utilizar:
         $see = new See();
-        $see->setCertificate(Storage::get($company->cert_path));
-        $see->setService($company->production ? SunatEndpoints::FE_PRODUCCION : SunatEndpoints::FE_BETA);
-        $see->setClaveSOL($company->ruc, $company->sol_user, $company->sol_pass);
-        return $see;
-    }
+        $see->setCertificate(Storage::get($company->cert_path));//le pasamos la ruta del certificado, da como resultado el contenido del certificado
+        $see->setService($company->production ? SunatEndpoints::FE_PRODUCCION : SunatEndpoints::FE_BETA);//le indicamos si es beta o produccion
+        $see->setClaveSOL($company->ruc, $company->sol_user, $company->sol_pass);//le pasamos los datos de la clave sol usurio secundario
+        return $see; //retornamos todos los valores
+        }
 
     public function getInvoice()
     {
@@ -58,11 +59,12 @@ class SunatService
             ->setAddress($this->getAddress());
     }
 
-    public function getClient(){
+    public function getClient()
+    {
         return (new Client())
-        ->setTipoDoc('6')
-        ->setNumDoc('20000000001')
-        ->setRznSocial('EMPRESA X');
+            ->setTipoDoc('6')
+            ->setNumDoc('20000000001')
+            ->setRznSocial('EMPRESA X');
     }
 
 
@@ -80,30 +82,60 @@ class SunatService
     }
 
 
-    public function getDetails(){
+    public function getDetails()
+    {
         $item = (new SaleDetail())
-        ->setCodProducto('P001')
-        ->setUnidad('NIU') // Unidad - Catalog. 03
-        ->setCantidad(2)
-        ->setMtoValorUnitario(50.00)
-        ->setDescripcion('PRODUCTO 1')
-        ->setMtoBaseIgv(100)
-        ->setPorcentajeIgv(18.00) // 18%
-        ->setIgv(18.00)
-        ->setTipAfeIgv('10') // Gravado Op. Onerosa - Catalog. 07
-        ->setTotalImpuestos(18.00) // Suma de impuestos en el detalle
-        ->setMtoValorVenta(100.00)
-        ->setMtoPrecioUnitario(59.00);
+            ->setCodProducto('P001')
+            ->setUnidad('NIU') // Unidad - Catalog. 03
+            ->setCantidad(2)
+            ->setMtoValorUnitario(50.00)
+            ->setDescripcion('PRODUCTO 1')
+            ->setMtoBaseIgv(100)
+            ->setPorcentajeIgv(18.00) // 18%
+            ->setIgv(18.00)
+            ->setTipAfeIgv('10') // Gravado Op. Onerosa - Catalog. 07
+            ->setTotalImpuestos(18.00) // Suma de impuestos en el detalle
+            ->setMtoValorVenta(100.00)
+            ->setMtoPrecioUnitario(59.00);
 
         return [$item];
     }
 
-    public function getLegends(){
+    public function getLegends()
+    {
         $legend = (new Legend())
-        ->setCode('1000') // Monto en letras - Catalog. 52
-        ->setValue('SON DOSCIENTOS TREINTA Y SEIS CON 00/100 SOLES');
+            ->setCode('1000') // Monto en letras - Catalog. 52
+            ->setValue('SON DOSCIENTOS TREINTA Y SEIS CON 00/100 SOLES');
 
         return [$legend];
     }
 
+    public function sunatResponse($result)
+    {
+
+        $response['success'] = $result->isSuccess();
+
+        // Verificamos que la conexión con SUNAT fue exitosa.
+        if (!$response['success']) {
+
+            $response['error'] = [
+                'code' => $result->getError()->getCode(),
+                'message' => $result->getError()->getMessage()
+            ];
+
+            return $response;
+        }
+
+        $response['cdrZip'] = base64_encode($result->getCdrZip());
+
+        $cdr = $result->getCdrResponse();
+
+        $response['cdrResponse'] = [
+            'code' => (int)$cdr->getCode(),
+            'description' => $cdr->getDescription(),
+            'notes' => $cdr->getNotes()
+        ];
+
+        return $response;
+    }
 }

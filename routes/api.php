@@ -24,4 +24,4 @@ Route::post('refresh', [AuthController::class, 'refresh']);
 Route::post('me', [AuthController::class, 'me']);
 
 Route::apiResource('companies', CompanyController::class)->middleware('auth:api');//se pone auth:api  porque por defecto es el guard web
-Route::post('invoices/send',[InvoiceController::class, 'send'])->middleware('auth:api');
+Route::post('invoices/send',[InvoiceController::class, 'send'])->middleware('auth:api');//poner el middleware para retornar el usurio autentificado por token
