@@ -25,7 +25,7 @@ class SunatService
         $see->setService($company->production ? SunatEndpoints::FE_PRODUCCION : SunatEndpoints::FE_BETA);//le indicamos si es beta o produccion
         $see->setClaveSOL($company->ruc, $company->sol_user, $company->sol_pass);//le pasamos los datos de la clave sol usurio secundario
         return $see; //retornamos todos los valores
-        }
+    }
 
     public function getInvoice()
     {
