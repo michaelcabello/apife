@@ -27,7 +27,7 @@
 "client":{
     "tipoDoc":"6",
     "numDoc":"20000000001",
-    "razonSocial":"ABC SRLL"
+    "rznSocial":"ABC SRLL"
 },
 "mtoOperGravadas":"100.00",
 "mtoIGV":"18.00",

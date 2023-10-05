@@ -25,13 +25,18 @@ class InvoiceController extends Controller
     public function send(Request $request)
     {
         $data = $request->all();
-        return $data;
+        //return $data;
 
-        $company = Company::where('user_id', $request->user()->id)->firstOrFail();
+       // $company = Company::where('user_id', $request->user()->id)->firstOrFail();
+       $company = Company::where('user_id', auth()->id())
+       ->where('ruc', $data['company']['ruc'])
+       ->firstOrFail();
+
+       //return $company;
 
         $sunat = new SunatService();//sunat service lo creamos nosotros
         $see = $sunat->getSee($company);//getSee esta en SunatService, getSee lo creamos nosotros
-        $invoice = $sunat->getInvoice();//aqui esta los datos de la boleta o factura
+        $invoice = $sunat->getInvoice($data);//aqui esta los datos de la boleta o factura
         $result = $see->send($invoice);//aqui se envia el comprobante, result necesita sunatResponse
 
         //return $sunat->sunatResponse($result);
