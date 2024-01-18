@@ -11,6 +11,8 @@ use App\Rules\UniqueRucRule;
 class CompanyController extends Controller
 {
 
+    //en la route se le indica que debe tener token o autenticación
+
     public function index()
     {
         //return "hola";

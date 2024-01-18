@@ -23,7 +23,7 @@ return new class extends Migration
             //credenciales
             $table->string('sol_user');
             $table->string('sol_pass');
-            $table->string('cert_path');
+            $table->string('cert_path');//ruta del certificado
 
             //para guis electronicas//credenciales API
             $table->string('client_id')->nullable();
