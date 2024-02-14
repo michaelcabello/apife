@@ -6,22 +6,12 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
-<<<<<<< HEAD
-        "greenter/htmltopdf": "^5.0",
-        "greenter/lite": "^5.0",
-        "greenter/report": "^5.0",
-        "guzzlehttp/guzzle": "^7.2",
-        "laravel/framework": "^9.19",
-        "laravel/sanctum": "^3.0",
-        "laravel/tinker": "^2.7",
-=======
         "greenter/lite": "^5.0.3",
         "greenter/report": "^5.0.3",
         "guzzlehttp/guzzle": "^7.8.1",
         "laravel/framework": "^9.52.16",
         "laravel/sanctum": "^3.3.3",
         "laravel/tinker": "^2.9",
->>>>>>> 82e992f7b73c65260ce77467605ff1c3ae6d3894
         "luecano/numero-a-letras": "^3.0",
         "tymon/jwt-auth": "^2.0"
     },
