@@ -23,6 +23,7 @@ use Greenter\Ws\Services\SunatEndpoints;
 use Greenter\Model\Despatch\Transportist;
 use Greenter\Model\Despatch\DespatchDetail;
 use Greenter\Model\Sale\FormaPagos\FormaPagoContado;
+use Greenter\Report\PdfReport;
 use Greenter\Report\Resolver\DefaultTemplateResolver;
 
 class SunatService
@@ -53,6 +54,7 @@ class SunatService
             ->setTipoMoneda($data['tipoMoneda']) // Sol - Catalog. 02
             ->setCompany($this->getCompany($data['company']))
             ->setClient($this->getClient($data['client']))
+
             //Mto Operaciones
             //aqui ya estan las operaciones calculadas
             ->setMtoOperGravadas($data['mtoOperGravadas'] ?? null)
@@ -426,7 +428,7 @@ class SunatService
 
         $report = new HtmlReport();
 
-        $resolver = new DefaultTemplateResolver();
+        $resolver = new DefaultTemplateResolver();//vera si es factura boleta, ...
 
         $report->setTemplate($resolver->getTemplate($invoice));
 
@@ -464,4 +466,51 @@ class SunatService
 
         return $green_legends;
     }
+
+
+    public function generatePdfReport($invoice)
+    {
+        $htmlReport = new HtmlReport();
+
+        $resolver = new DefaultTemplateResolver();
+        $htmlReport->setTemplate($resolver->getTemplate($invoice));
+
+        $report = new PdfReport($htmlReport);
+        // Options: Ver mas en https://wkhtmltopdf.org/usage/wkhtmltopdf.txt
+        $report->setOptions( [
+            'no-outline',
+            'viewport-size' => '1280x1024',
+            'page-width' => '21cm',
+            'page-height' => '29.7cm',
+        ]);
+
+        $report->setBinPath(env('WKHTMLTOPDF_PATH'));
+
+        $ruc = $invoice->getCompany()->getRuc();
+        $company = ModelsCompany::where('ruc', $ruc)->first();
+
+        $params = [
+            'system' => [
+                'logo' => Storage::get($company->logo_path), // Logo de Empresa
+                'hash' => 'qqnr2dN4p/HmaEA/CJuVGo7dv5g=', // Valor Resumen
+            ],
+            'user' => [
+                'header'     => 'Telf: <b>(01) 123375</b>', // Texto que se ubica debajo de la dirección de empresa
+                'extras'     => [
+                    // Leyendas adicionales
+                    ['name' => 'CONDICION DE PAGO', 'value' => 'Efectivo'     ],
+                    ['name' => 'VENDEDOR'         , 'value' => 'GITHUB SELLER'],
+                ],
+                'footer' => '<p>Nro Resolucion: <b>3232323</b></p>'
+            ]
+        ];
+
+        $pdf = $report->render($invoice, $params);
+
+        Storage::put('invoices/' . $invoice->getName() . '.pdf', $pdf);
+    }
+
+
+
+
 }

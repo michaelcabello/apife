@@ -1,13 +1,16 @@
 <?php
 
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\NoteController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Api\DespatchController;
 use App\Http\Controllers\Api\RegisterController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,6 +23,7 @@ use App\Http\Controllers\Api\RegisterController;
 */
 
 Route::post('register',[RegisterController::class, 'store']);
+
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout']);
 Route::post('refresh', [AuthController::class, 'refresh']);
@@ -42,8 +46,15 @@ Route::post('notes/pdf', [NoteController::class, 'pdf'])->middleware('auth:api')
 
 
 
-
 //Despatches
 Route::post('despatches/send', [DespatchController::class, 'send'])->middleware('auth:api');
 Route::post('despatches/xml', [DespatchController::class, 'xml'])->middleware('auth:api');
 Route::post('despatches/pdf', [DespatchController::class, 'pdf'])->middleware('auth:api');
+
+
+Route::get('prueba', function(){
+    $company = Company::first();
+    //return $company;
+    return Storage::get($company->logo_path);
+
+});

@@ -24,8 +24,8 @@ use Greenter\Model\Company\Company as CompanyCompany;
 
 class InvoiceController extends Controller
 {
-
     use SunatTrait;
+
 
     public function send(Request $request)
     {
@@ -150,13 +150,9 @@ class InvoiceController extends Controller
         //$see = $sunat->getSee($company);
         $invoice = $sunat->getInvoice($data);
 
-        //$sunat->generatePdfReport($invoice);
+       //$pdf = $sunat->generatePdfReport($invoice);
 
         return $sunat->getHtmlReport($invoice);
     }
-
-
-
-
 
 }
