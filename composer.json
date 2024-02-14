@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+<<<<<<< HEAD
         "greenter/htmltopdf": "^5.0",
         "greenter/lite": "^5.0",
         "greenter/report": "^5.0",
@@ -13,17 +14,26 @@
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
+=======
+        "greenter/lite": "^5.0.3",
+        "greenter/report": "^5.0.3",
+        "guzzlehttp/guzzle": "^7.8.1",
+        "laravel/framework": "^9.52.16",
+        "laravel/sanctum": "^3.3.3",
+        "laravel/tinker": "^2.9",
+>>>>>>> 82e992f7b73c65260ce77467605ff1c3ae6d3894
         "luecano/numero-a-letras": "^3.0",
         "tymon/jwt-auth": "^2.0"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.9.1",
-        "laravel/pint": "^1.0",
-        "laravel/sail": "^1.0.1",
-        "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^6.1",
-        "phpunit/phpunit": "^9.5.10",
-        "spatie/laravel-ignition": "^1.0"
+        "deployer/deployer": "^7.3",
+        "fakerphp/faker": "^1.23.1",
+        "laravel/pint": "^1.13.10",
+        "laravel/sail": "^1.27.2",
+        "mockery/mockery": "^1.6.7",
+        "nunomaduro/collision": "^6.4",
+        "phpunit/phpunit": "^9.6.16",
+        "spatie/laravel-ignition": "^1.6.4"
     },
     "autoload": {
         "psr-4": {
